@@ -8,7 +8,7 @@ void DataBase::ConnectBase()
         if (!conn || !conn->is_open()) {
           
             // Your data for connecting to the database
-            conn = make_unique<pqxx::connection>("host=localhost port=6969 dbname=UsersBeHappy user=postgres password=pass123 options='-c client_encoding=UTF8'");
+            conn = make_unique<pqxx::connection>("host=localhost port=6969 dbname=UsersBeHappy user=postgres password=256869 options='-c client_encoding=UTF8'");
             if (conn->is_open()) {
                 cout << "Connected to database: " << conn->dbname() << endl;
             }

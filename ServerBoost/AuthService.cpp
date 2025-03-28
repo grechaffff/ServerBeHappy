@@ -108,7 +108,7 @@ bool AuthService::Login()
         db.ConnectBase();
 
         pqxx::result result = txn.exec(
-            pqxx::zview("SELECT password_hash, salt, t_cost, m_cost, parallelism, role FROM users WHERE username = $1"),
+            pqxx::zview("SELECT id , password_hash, salt, t_cost, m_cost, parallelism, role FROM users WHERE username = $1"),
             pqxx::params{ username }
         );
 
@@ -136,6 +136,7 @@ bool AuthService::Login()
         }
 
         // Получение данных пользователя
+        int userID = result[0]["id"].as<int>();
         std::string stored_hash = result[0]["password_hash"].c_str();
        // cout << "Stored_hash:" << stored_hash << endl;
         std::string stored_salt = result[0]["salt"].c_str();
@@ -145,8 +146,9 @@ bool AuthService::Login()
         std::string role = result[0]["role"].as<string>();
         std::cout << "Role:" << role << std::endl;
 
+        std::cout << "UserID:" << userID << std::endl;
        
-        
+        std::string ID = to_string(userID);
 
         // Преобразование соли из HEX в байты
         std::vector<uint8_t> salt_bytes;
@@ -207,7 +209,7 @@ bool AuthService::Login()
        
         string response = "Login Successfull";
 
-        string message = response + "|" + role;
+        string message = response + "|" + role + "|" + ID;
         connection_->send_message(message);
 
 
